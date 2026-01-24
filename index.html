@@ -144,34 +144,59 @@ body {
   </div>
 </div>
 
+<!-- OTP Screen Lock -->
+<div id="otpLock" style="position:fixed; inset:0; background:#eef1f4; z-index:99999; display:flex; justify-content:center; align-items:center;">
+
+  <div style="background:white; width:440px; border-radius:12px; box-shadow:0 20px 40px rgba(0,0,0,0.2); overflow:hidden;">
+
+    <div style="padding:16px 22px; background:#1f2933; color:white; font-weight:600;">
+      Identity Verification
+    </div>
+
+    <div style="padding:22px; font-size:14px; color:#374151;">
+      OTP has been sent to  
+      <b>Varun.Prabhu@du.ae</b>
+    </div>
+
+    <div style="padding:0 22px 18px;">
+      <input id="otpInput" type="text" placeholder="Enter OTP"
+        style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; font-size:15px;">
+    </div>
+
+    <div style="padding:14px 22px; background:#f9fafb; text-align:right;">
+      <button onclick="verifyOTP()" style="padding:8px 20px; background:#22c55e; border:none; color:white; border-radius:6px; font-weight:600; cursor:pointer;">
+        Verify
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <script>
-const START_QUEUE = 17;
-const DROP_INTERVAL_MS = 2 * 60 * 60 * 1000; // 2 hours
-//const DROP_INTERVAL_MS = 2 * 60 * 60 * 1000;
-  
-// Initialize start time once
-if (!localStorage.getItem("queueStartTime")) {
-  localStorage.setItem("queueStartTime", Date.now());
+const FAKE_OTP = "123456"; // Demo OTP
+
+// Lock screen if not verified
+if (!localStorage.getItem("otpVerified")) {
+  document.body.style.overflow = "hidden";
+} else {
+  document.getElementById("otpLock").style.display = "none";
 }
 
-const startTime = parseInt(localStorage.getItem("queueStartTime"));
+function verifyOTP() {
+  const entered = document.getElementById("otpInput").value.trim();
 
-function updateQueue() {
-  const now = Date.now();
-  const elapsed = now - startTime;
+  if (entered === FAKE_OTP) {
+    localStorage.setItem("otpVerified", "true");
 
-  const drops = Math.floor(elapsed / DROP_INTERVAL_MS);
-  let queue = START_QUEUE - drops;
+    document.getElementById("otpLock").style.display = "none";
+    document.body.style.overflow = "auto";
 
-  if (queue < 0) queue = 0;
-
-  document.getElementById("queue").innerText = queue;
+  } else {
+    alert("Invalid OTP. Please try again.");
+  }
 }
-
-// Update silently every minute
-updateQueue();
-setInterval(updateQueue, 60000);
 </script>
+
 
 </body>
 </html>
