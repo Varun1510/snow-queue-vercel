@@ -173,5 +173,55 @@ updateQueue();
 setInterval(updateQueue, 60000);
 </script>
 
-</body>
+<!-- OTP Modal -->
+<div id="otpModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; justify-content:center; align-items:center;">
+
+  <div style="background:white; width:420px; border-radius:10px; box-shadow:0 20px 40px rgba(0,0,0,0.15); overflow:hidden;">
+
+    <div style="padding:16px 22px; background:#1f2933; color:white; font-weight:600;">
+      Verification Required
+    </div>
+
+    <div style="padding:22px; font-size:14px; color:#374151;">
+      OTP has been sent to  
+      <b>Varun.Prabhu@du.ae</b>
+    </div>
+
+    <div style="padding:0 22px 18px;">
+      <input id="otpInput" type="text" placeholder="Enter OTP"
+        style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; font-size:15px;">
+    </div>
+
+    <div style="padding:14px 22px; background:#f9fafb; text-align:right;">
+      <button onclick="verifyOTP()" style="padding:8px 18px; background:#22c55e; border:none; color:white; border-radius:6px; font-weight:600; cursor:pointer;">
+        Verify
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const EMAIL = "Varun.Prabhu@du.ae";
+const FAKE_OTP = "478128"; // Demo OTP
+
+// Show popup only first time
+if (!localStorage.getItem("otpVerified")) {
+  document.getElementById("otpModal").style.display = "flex";
+}
+
+function verifyOTP() {
+  const entered = document.getElementById("otpInput").value.trim();
+
+  if (entered === FAKE_OTP) {
+    localStorage.setItem("otpVerified", "true");
+    document.getElementById("otpModal").style.display = "none";
+  } else {
+    alert("Invalid OTP. Try again.");
+  }
+}
+</script>
+
+  
+</body>  
 </html>
