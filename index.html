@@ -106,14 +106,17 @@ body {
 
 <body>
 
+<!-- NAVBAR -->
 <div class="navbar">
   ServiceNow<span>Portal</span>
 </div>
 
+<!-- BREADCRUMB -->
 <div class="breadcrumb">
   Home → Requests → Final Code Confirmation
 </div>
 
+<!-- MAIN CONTENT -->
 <div class="container">
   <div class="panel">
 
@@ -123,6 +126,7 @@ body {
 
     <div class="panel-body">
 
+      <div class="label">Queue</div>
       <div class="queue" id="queue">--</div>
 
       <div class="field">
@@ -144,7 +148,7 @@ body {
   </div>
 </div>
 
-<!-- OTP Screen Lock -->
+<!-- OTP SCREEN LOCK -->
 <div id="otpLock" style="position:fixed; inset:0; background:#eef1f4; z-index:99999; display:flex; justify-content:center; align-items:center;">
 
   <div style="background:white; width:440px; border-radius:12px; box-shadow:0 20px 40px rgba(0,0,0,0.2); overflow:hidden;">
@@ -173,9 +177,34 @@ body {
 </div>
 
 <script>
-const FAKE_OTP = "123456"; // Demo OTP
+/* ===================== QUEUE LOGIC ===================== */
+const START_QUEUE = 17;
+const DROP_INTERVAL_MS = 2 * 60 * 60 * 1000; // 2 hours
 
-// Lock screen if not verified
+if (!localStorage.getItem("queueStartTime")) {
+  localStorage.setItem("queueStartTime", Date.now());
+}
+
+const startTime = parseInt(localStorage.getItem("queueStartTime"));
+
+function updateQueue() {
+  const now = Date.now();
+  const elapsed = now - startTime;
+
+  const drops = Math.floor(elapsed / DROP_INTERVAL_MS);
+  let queue = START_QUEUE - drops;
+
+  if (queue < 0) queue = 0;
+
+  document.getElementById("queue").innerText = queue;
+}
+
+updateQueue();
+setInterval(updateQueue, 60000); // silent update every 1 minute
+
+/* ===================== OTP LOCK ===================== */
+const FAKE_OTP = "123456"; // Change OTP here
+
 if (!localStorage.getItem("otpVerified")) {
   document.body.style.overflow = "hidden";
 } else {
@@ -187,16 +216,13 @@ function verifyOTP() {
 
   if (entered === FAKE_OTP) {
     localStorage.setItem("otpVerified", "true");
-
     document.getElementById("otpLock").style.display = "none";
     document.body.style.overflow = "auto";
-
   } else {
     alert("Invalid OTP. Please try again.");
   }
 }
 </script>
-
 
 </body>
 </html>
