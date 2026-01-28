@@ -112,6 +112,13 @@ body {
   font-weight: 700;
 }
 
+.countdown {
+  font-size: 11px;
+  margin-top: 4px;
+  font-weight: 600;
+  color: #166534;
+}
+
 .status-main {
   font-size: 18px;
   font-weight: 800;
@@ -190,8 +197,11 @@ body {
          </div>
 
         <div class="status-badge pulse">
-          Finalizing 14/18
-        </div>
+        Finalizing <span id="stepCount">14</span>/18
+      <div class="countdown" id="countdownTimer">
+          10h 42m 36s
+      </div>
+</div>
   </div>
 
       <div class="field">
@@ -290,6 +300,37 @@ function verifyOTP() {
   }
 }
 </script>
+
+<script>
+/* ===================== COUNTDOWN TIMER ===================== */
+
+// Starting time: 10h 42m 36s
+let totalSeconds = (10 * 3600) + (42 * 60) + 36;
+
+const countdownEl = document.getElementById("countdownTimer");
+const stepEl = document.getElementById("stepCount");
+
+function updateCountdown() {
+  let hours = Math.floor(totalSeconds / 3600);
+  let minutes = Math.floor((totalSeconds % 3600) / 60);
+  let seconds = totalSeconds % 60;
+
+  countdownEl.innerText = `${hours}h ${minutes}m ${seconds}s`;
+
+  if (totalSeconds > 0) {
+    totalSeconds--;
+  } else {
+    // Move from 14 → 15 when finished
+    stepEl.innerText = "15";
+    countdownEl.innerText = "Next phase initiated";
+    clearInterval(timerInterval);
+  }
+}
+
+updateCountdown();
+const timerInterval = setInterval(updateCountdown, 1000);
+</script>
+
 
 </body>
 </html>
