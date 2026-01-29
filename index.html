@@ -199,7 +199,7 @@ body {
         <div class="status-badge pulse">
         Finalizing <span id="stepCount">15</span>/18
       <div class="countdown" id="countdownTimer">
-          10h 42m 36s
+          3h 21m 48s
       </div>
 </div>
   </div>
@@ -302,34 +302,54 @@ function verifyOTP() {
 </script>
 
 <script>
-/* ===================== COUNTDOWN TIMER ===================== */
+/* ===================== PERSISTENT COUNTDOWN TIMER — STEP 15 ===================== */
 
-// Starting time: 10h 42m 36s
-let totalSeconds = (10 * 3600) + (42 * 60) + 36;
-
-const countdownEl = document.getElementById("countdownTimer");
 const stepEl = document.getElementById("stepCount");
+const countdownEl = document.getElementById("countdownTimer");
+
+// Step label
+stepEl.innerText = "15";
+
+// Duration for Step 15 = 3h 21m 48s
+const STEP_DURATION = (3 * 3600) + (21 * 60) + 48;
+
+// Storage key for Step 15
+const STORAGE_KEY = "step15EndTime";
+
+// Load or set end time
+let endTime = localStorage.getItem(STORAGE_KEY);
+
+if (!endTime) {
+  endTime = Date.now() + STEP_DURATION * 1000;
+  localStorage.setItem(STORAGE_KEY, endTime);
+} else {
+  endTime = parseInt(endTime);
+}
 
 function updateCountdown() {
-  let hours = Math.floor(totalSeconds / 3600);
-  let minutes = Math.floor((totalSeconds % 3600) / 60);
-  let seconds = totalSeconds % 60;
+  const now = Date.now();
+  let remaining = Math.floor((endTime - now) / 1000);
+
+  if (remaining <= 0) {
+    stepEl.innerText = "16";
+    countdownEl.innerText = "Moving to next phase...";
+    localStorage.removeItem(STORAGE_KEY);
+    clearInterval(timerInterval);
+    return;
+  }
+
+  let hours = Math.floor(remaining / 3600);
+  let minutes = Math.floor((remaining % 3600) / 60);
+  let seconds = remaining % 60;
 
   countdownEl.innerText = `${hours}h ${minutes}m ${seconds}s`;
-
-  if (totalSeconds > 0) {
-    totalSeconds--;
-  } else {
-    // Move from 14 → 15 when finished
-    stepEl.innerText = "15";
-    countdownEl.innerText = "Next phase initiated";
-    clearInterval(timerInterval);
-  }
 }
 
 updateCountdown();
 const timerInterval = setInterval(updateCountdown, 1000);
 </script>
+
+
 
 
 </body>
