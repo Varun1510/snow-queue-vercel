@@ -197,10 +197,11 @@ body {
          </div>
 
         <div class="status-badge pulse">
-        Finalizing <span id="stepCount">15</span>/18
+        Finalizing <span id="stepCount">16</span>/18
       <div class="countdown" id="countdownTimer">
-          3h 21m 48s
+          1d 06h 23s
       </div>
+
 </div>
   </div>
 
@@ -302,52 +303,84 @@ function verifyOTP() {
 </script>
 
 <script>
-/* ===================== PERSISTENT COUNTDOWN TIMER — STEP 15 ===================== */
+/* ===================== WORKFLOW — STEPS 16 → 18 ===================== */
 
-const stepEl = document.getElementById("stepCount");
 const countdownEl = document.getElementById("countdownTimer");
+const stepEl = document.getElementById("stepCount");
 
-// Step label
-stepEl.innerText = "15";
+const TOTAL_STEPS = 18;
 
-// Duration for Step 15 = 3h 21m 48s
-const STEP_DURATION = (3 * 3600) + (21 * 60) + 48;
+// Step durations in seconds (16 → 18)
+const steps = [
+  { step: 16, duration: (1 * 86400) + (6 * 3600) + 23 },   // 1d 06h 23s
+  { step: 17, duration: (1 * 86400) + (12 * 3600) + 30 },  // 1d 12h 30s
+  { step: 18, duration: (3 * 86400) + (16 * 3600) + 40 }   // 3d 16h 40s
+];
 
-// Storage key for Step 15
-const STORAGE_KEY = "step15EndTime";
+// Storage keys
+const STEP_KEY = "workflowCurrentIndex";
+const TIME_KEY = "workflowEndTime";
 
-// Load or set end time
-let endTime = localStorage.getItem(STORAGE_KEY);
+// Load current index
+let currentIndex = parseInt(localStorage.getItem(STEP_KEY));
+if (isNaN(currentIndex)) currentIndex = 0;
 
+// Initialize end time if missing
+let endTime = localStorage.getItem(TIME_KEY);
 if (!endTime) {
-  endTime = Date.now() + STEP_DURATION * 1000;
-  localStorage.setItem(STORAGE_KEY, endTime);
+  endTime = Date.now() + steps[currentIndex].duration * 1000;
+  localStorage.setItem(STEP_KEY, currentIndex);
+  localStorage.setItem(TIME_KEY, endTime);
 } else {
   endTime = parseInt(endTime);
 }
 
-function updateCountdown() {
-  const now = Date.now();
-  let remaining = Math.floor((endTime - now) / 1000);
+// Format time: days + hours + minutes + seconds
+function formatTime(sec) {
+  let d = Math.floor(sec / 86400);
+  let h = Math.floor((sec % 86400) / 3600);
+  let m = Math.floor((sec % 3600) / 60);
+  let s = sec % 60;
+  return `${d}d ${h}h ${m}m ${s}s`;
+}
 
-  if (remaining <= 0) {
-    stepEl.innerText = "16";
-    countdownEl.innerText = "Moving to next phase...";
-    localStorage.removeItem(STORAGE_KEY);
-    clearInterval(timerInterval);
+function updateCountdown() {
+  // If finished all steps
+  if (currentIndex >= steps.length) {
+    stepEl.innerText = "18";
+    countdownEl.innerText = "Request finalized — All steps completed";
     return;
   }
 
-  let hours = Math.floor(remaining / 3600);
-  let minutes = Math.floor((remaining % 3600) / 60);
-  let seconds = remaining % 60;
+  const now = Date.now();
+  let remaining = Math.floor((endTime - now) / 1000);
 
-  countdownEl.innerText = `${hours}h ${minutes}m ${seconds}s`;
+  // Show current step
+  stepEl.innerText = steps[currentIndex].step;
+
+  if (remaining <= 0) {
+    // Move to next step
+    currentIndex++;
+    localStorage.setItem(STEP_KEY, currentIndex);
+
+    if (currentIndex < steps.length) {
+      endTime = Date.now() + steps[currentIndex].duration * 1000;
+      localStorage.setItem(TIME_KEY, endTime);
+    } else {
+      localStorage.removeItem(STEP_KEY);
+      localStorage.removeItem(TIME_KEY);
+      countdownEl.innerText = "Request finalized — All steps completed";
+      return;
+    }
+  } else {
+    countdownEl.innerText = formatTime(remaining);
+  }
 }
 
 updateCountdown();
-const timerInterval = setInterval(updateCountdown, 1000);
+setInterval(updateCountdown, 1000);
 </script>
+
 
 
 
