@@ -197,7 +197,7 @@ body {
          </div>
 
         <div class="status-badge pulse">
-        Finalizing <span id="stepCount">16</span>/18
+        Finalizing <span id="stepCount">17</span>/18
       <div class="countdown" id="countdownTimer">
           1d 06h 23s
       </div>
@@ -303,17 +303,15 @@ function verifyOTP() {
 </script>
 
 <script>
-/* ===================== WORKFLOW — STEPS 16 → 18 ===================== */
+/* ===================== WORKFLOW — STEPS 16 → 18 (AUTO DYNAMIC) ===================== */
 
 const countdownEl = document.getElementById("countdownTimer");
 const stepEl = document.getElementById("stepCount");
 
-const TOTAL_STEPS = 18;
-
-// Step durations in seconds (16 → 18)
+// Step durations in seconds
 const steps = [
   { step: 16, duration: (1 * 86400) + (6 * 3600) + 23 },   // 1d 06h 23s
-  { step: 17, duration: (1 * 86400) + (12 * 3600) + 30 },  // 1d 12h 30s
+  { step: 17, duration: (3 * 86400) + (12 * 3600) + 30 },  // 3d 12h 30s ✅
   { step: 18, duration: (3 * 86400) + (16 * 3600) + 40 }   // 3d 16h 40s
 ];
 
@@ -335,7 +333,7 @@ if (!endTime) {
   endTime = parseInt(endTime);
 }
 
-// Format time: days + hours + minutes + seconds
+// Format time
 function formatTime(sec) {
   let d = Math.floor(sec / 86400);
   let h = Math.floor((sec % 86400) / 3600);
@@ -345,7 +343,7 @@ function formatTime(sec) {
 }
 
 function updateCountdown() {
-  // If finished all steps
+  // Completed all steps
   if (currentIndex >= steps.length) {
     stepEl.innerText = "18";
     countdownEl.innerText = "Request finalized — All steps completed";
@@ -355,11 +353,11 @@ function updateCountdown() {
   const now = Date.now();
   let remaining = Math.floor((endTime - now) / 1000);
 
-  // Show current step
+  // Always sync step number dynamically
   stepEl.innerText = steps[currentIndex].step;
 
+  // Step finished → move to next
   if (remaining <= 0) {
-    // Move to next step
     currentIndex++;
     localStorage.setItem(STEP_KEY, currentIndex);
 
@@ -380,6 +378,7 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
+
 
 
 
