@@ -302,38 +302,25 @@ function verifyOTP() {
 }
 </script>
 
-<script>
-/* ===================== WORKFLOW — STEPS 16 → 18 (AUTO DYNAMIC) ===================== */
+
 
 <script>
-/* ===================== GLOBAL IST SYNC — START FROM STEP 17 ===================== */
+/* ===================== GLOBAL IST SYNC — STEP 17 ===================== */
 
 const countdownEl = document.getElementById("countdownTimer");
 const stepEl = document.getElementById("stepCount");
 
-// STEP 17 GLOBAL START TIME (IST)
+// STEP 17 GLOBAL START TIME IN IST (EDIT IF NEEDED)
 const STEP_17_START_IST = new Date("2026-02-01T15:30:00+05:30").getTime();
 
-// Step durations in seconds
-const steps = [
-  { step: 17, duration: (3 * 86400) + (12 * 3600) + 30 },  // 3d 12h 30s
-  { step: 18, duration: (3 * 86400) + (16 * 3600) + 40 }   // 3d 16h 40s
-];
+// Step durations
+const STEP_17_DURATION = (3 * 86400) + (12 * 3600) + 30; // 3d 12h 30s
+const STEP_18_DURATION = (3 * 86400) + (16 * 3600) + 40; // 3d 16h 40s
 
-// Build timeline
-let timeline = [];
-let currentStart = STEP_17_START_IST;
+const STEP_17_END = STEP_17_START_IST + STEP_17_DURATION * 1000;
+const STEP_18_END = STEP_17_END + STEP_18_DURATION * 1000;
 
-steps.forEach(step => {
-  timeline.push({
-    step: step.step,
-    start: currentStart,
-    end: currentStart + step.duration * 1000
-  });
-  currentStart += step.duration * 1000;
-});
-
-// Format remaining time
+// Format countdown
 function formatTime(sec) {
   let d = Math.floor(sec / 86400);
   let h = Math.floor((sec % 86400) / 3600);
@@ -345,26 +332,40 @@ function formatTime(sec) {
 function updateCountdown() {
   const now = Date.now();
 
-  // Find active step globally
-  let activeStep = timeline.find(step => now >= step.start && now < step.end);
+  // STEP 17 ACTIVE
+  if (now >= STEP_17_START_IST && now < STEP_17_END) {
+    stepEl.innerText = "17";
+    let remaining = Math.floor((STEP_17_END - now) / 1000);
+    countdownEl.innerText = formatTime(remaining);
+    return;
+  }
 
-  // If completed
-  if (!activeStep) {
+  // STEP 18 ACTIVE
+  if (now >= STEP_17_END && now < STEP_18_END) {
+    stepEl.innerText = "18";
+    let remaining = Math.floor((STEP_18_END - now) / 1000);
+    countdownEl.innerText = formatTime(remaining);
+    return;
+  }
+
+  // WORKFLOW FINISHED
+  if (now >= STEP_18_END) {
     stepEl.innerText = "18";
     countdownEl.innerText = "Request finalized — All steps completed";
     return;
   }
 
-  // Update UI
-  stepEl.innerText = activeStep.step;
-
-  let remaining = Math.floor((activeStep.end - now) / 1000);
-  countdownEl.innerText = formatTime(remaining);
+  // BEFORE STEP 17 STARTS
+  if (now < STEP_17_START_IST) {
+    let remaining = Math.floor((STEP_17_START_IST - now) / 1000);
+    countdownEl.innerText = "Starts in " + formatTime(remaining);
+  }
 }
 
 updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
+
 
 
 
