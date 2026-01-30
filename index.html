@@ -305,35 +305,35 @@ function verifyOTP() {
 <script>
 /* ===================== WORKFLOW — STEPS 16 → 18 (AUTO DYNAMIC) ===================== */
 
+<script>
+/* ===================== GLOBAL IST SYNC — START FROM STEP 17 ===================== */
+
 const countdownEl = document.getElementById("countdownTimer");
 const stepEl = document.getElementById("stepCount");
 
+// STEP 17 GLOBAL START TIME (IST)
+const STEP_17_START_IST = new Date("2026-02-01T15:30:00+05:30").getTime();
+
 // Step durations in seconds
 const steps = [
-  { step: 16, duration: (1 * 86400) + (6 * 3600) + 23 },   // 1d 06h 23s
-  { step: 17, duration: (3 * 86400) + (12 * 3600) + 30 },  // 3d 12h 30s ✅
+  { step: 17, duration: (3 * 86400) + (12 * 3600) + 30 },  // 3d 12h 30s
   { step: 18, duration: (3 * 86400) + (16 * 3600) + 40 }   // 3d 16h 40s
 ];
 
-// Storage keys
-const STEP_KEY = "workflowCurrentIndex";
-const TIME_KEY = "workflowEndTime";
+// Build timeline
+let timeline = [];
+let currentStart = STEP_17_START_IST;
 
-// Load current index
-let currentIndex = parseInt(localStorage.getItem(STEP_KEY));
-if (isNaN(currentIndex)) currentIndex = 0;
+steps.forEach(step => {
+  timeline.push({
+    step: step.step,
+    start: currentStart,
+    end: currentStart + step.duration * 1000
+  });
+  currentStart += step.duration * 1000;
+});
 
-// Initialize end time if missing
-let endTime = localStorage.getItem(TIME_KEY);
-if (!endTime) {
-  endTime = Date.now() + steps[currentIndex].duration * 1000;
-  localStorage.setItem(STEP_KEY, currentIndex);
-  localStorage.setItem(TIME_KEY, endTime);
-} else {
-  endTime = parseInt(endTime);
-}
-
-// Format time
+// Format remaining time
 function formatTime(sec) {
   let d = Math.floor(sec / 86400);
   let h = Math.floor((sec % 86400) / 3600);
@@ -343,36 +343,23 @@ function formatTime(sec) {
 }
 
 function updateCountdown() {
-  // Completed all steps
-  if (currentIndex >= steps.length) {
+  const now = Date.now();
+
+  // Find active step globally
+  let activeStep = timeline.find(step => now >= step.start && now < step.end);
+
+  // If completed
+  if (!activeStep) {
     stepEl.innerText = "18";
     countdownEl.innerText = "Request finalized — All steps completed";
     return;
   }
 
-  const now = Date.now();
-  let remaining = Math.floor((endTime - now) / 1000);
+  // Update UI
+  stepEl.innerText = activeStep.step;
 
-  // Always sync step number dynamically
-  stepEl.innerText = steps[currentIndex].step;
-
-  // Step finished → move to next
-  if (remaining <= 0) {
-    currentIndex++;
-    localStorage.setItem(STEP_KEY, currentIndex);
-
-    if (currentIndex < steps.length) {
-      endTime = Date.now() + steps[currentIndex].duration * 1000;
-      localStorage.setItem(TIME_KEY, endTime);
-    } else {
-      localStorage.removeItem(STEP_KEY);
-      localStorage.removeItem(TIME_KEY);
-      countdownEl.innerText = "Request finalized — All steps completed";
-      return;
-    }
-  } else {
-    countdownEl.innerText = formatTime(remaining);
-  }
+  let remaining = Math.floor((activeStep.end - now) / 1000);
+  countdownEl.innerText = formatTime(remaining);
 }
 
 updateCountdown();
