@@ -303,9 +303,9 @@ function verifyOTP() {
 }
 </script>
 
+/*
 
 
-<script>
 /* ===================== GLOBAL IST SYNC — STEP 17 ACTIVE ===================== */
 
 const countdownEl = document.getElementById("countdownTimer");
@@ -347,7 +347,55 @@ function updateCountdown() {
 
 updateCountdown();
 setInterval(updateCountdown, 1000);
+
+
+*/
+
+<script>
+/* ===================== GLOBAL IST SYNC — STEP TRANSITION ===================== */
+
+const countdownEl = document.getElementById("countdownTimer");
+const stepEl = document.getElementById("stepCount");
+
+// STEP 17 START TIME (IST)
+const STEP_17_START_IST = new Date("2026-02-01T13:30:00+05:30").getTime();
+
+// STEP 17 DURATION = 3d 12h 30m
+const STEP_17_DURATION_SEC = (3 * 86400) + (12 * 3600) + (30 * 60);
+
+// STEP 17 END TIME
+const STEP_17_END = STEP_17_START_IST + STEP_17_DURATION_SEC * 1000;
+
+function formatTime(sec) {
+  let d = Math.floor(sec / 86400);
+  let h = Math.floor((sec % 86400) / 3600);
+  let m = Math.floor((sec % 3600) / 60);
+  let s = sec % 60;
+  return `${d}d ${h}h ${m}m ${s}s`;
+}
+
+function updateCountdown() {
+  const now = Date.now();
+  let remaining = Math.floor((STEP_17_END - now) / 1000);
+
+  // 🔁 STEP 17 → STEP 18 SWITCH
+  if (remaining <= 0) {
+    stepEl.innerText = "18";
+    countdownEl.innerText = "We enter the code";
+    countdownEl.style.color = "#15803d";
+    countdownEl.style.fontWeight = "700";
+    return;
+  }
+
+  // STEP 17 ACTIVE
+  stepEl.innerText = "17";
+  countdownEl.innerText = "Ending in " + formatTime(remaining);
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
 </script>
+
 
 
 
