@@ -309,19 +309,24 @@ function verifyOTP() {
 const countdownEl = document.getElementById("countdownTimer");
 const stepEl = document.getElementById("stepCount");
 
-// STEP 17 END TIME (IST)
-const STEP_17_END = new Date("2026-02-01T17:45:00+05:30").getTime();
+// ================= STEP 18 CONFIG =================
 
-// If Step 18 already reached → LOCK IT
-if (localStorage.getItem("step18Locked") === "true") {
-  stepEl.innerText = "18";
-  countdownEl.innerText = "Please enter the code";
-  countdownEl.style.fontSize = "13px";
-  countdownEl.style.fontWeight = "700";
-  countdownEl.style.color = "#166534";
-} else {
-  startCountdown();
+// STEP 18 DURATION → 8d 16h 42m 30s
+const STEP_18_DURATION_SEC =
+  (8 * 86400) + (16 * 3600) + (42 * 60) + 30;
+
+// Persisted start time
+let step18Start = localStorage.getItem("step18StartTime");
+
+if (!step18Start) {
+  step18Start = Date.now();
+  localStorage.setItem("step18StartTime", step18Start);
 }
+
+const STEP_18_END =
+  parseInt(step18Start, 10) + STEP_18_DURATION_SEC * 1000;
+
+// ================= UTIL =================
 
 function formatTime(sec) {
   let d = Math.floor(sec / 86400);
@@ -331,33 +336,26 @@ function formatTime(sec) {
   return `${d}d ${h}h ${m}m ${s}s`;
 }
 
-function startCountdown() {
-  function update() {
-    const now = Date.now();
-    const remaining = Math.floor((STEP_17_END - now) / 1000);
+// ================= STEP 18 UI =================
 
-    // 🔒 FINAL STATE — STEP 18
-    if (remaining <= 0) {
-      localStorage.setItem("step18Locked", "true");
-      stepEl.innerText = "18";
-      countdownEl.innerText = "Please enter the code";
-      countdownEl.style.fontSize = "13px";
-      countdownEl.style.color = "#dc2626";   // red
-      countdownEl.style.fontWeight = "800";
+function updateStep18Countdown() {
+  const now = Date.now();
+  let remaining = Math.floor((STEP_18_END - now) / 1000);
 
-      clearInterval(timer);
-      return;
-    }
-
-    // STEP 17
-    stepEl.innerText = "17";
-    countdownEl.innerText = "Ending in " + formatTime(remaining);
+  if (remaining <= 0) {
+    countdownEl.innerText = "Final step completed";
+    return;
   }
 
-  update();
-  const timer = setInterval(update, 1000);
+  stepEl.innerText = "18";
+  countdownEl.innerText = "Ending in " + formatTime(remaining);
 }
+
+// Initial render + live countdown
+updateStep18Countdown();
+setInterval(updateStep18Countdown, 1000);
 </script>
+
 
 
 
