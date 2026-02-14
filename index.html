@@ -193,16 +193,16 @@ body {
               <div class="status-main">Final Approval Assessment</div>
               <div class="status-sub">
                   Finalizing final draft
-            </div>
-         </div>
+          </div>
+      </div>
 
-        <div class="status-badge pulse">
-        Wrapping the repositories
-      <div class="countdown" id="countdownTimer">
-        Calculating
+      <div class="status-badge pulse">
+          Wrapping the repositories
+            <div class="countdown" id="countdownTimer">
+                Syncing IST time...
+            </div>
       </div>
-      </div>
-  
+
 
 </div>
   </div>
@@ -306,28 +306,31 @@ function verifyOTP() {
 
 
 
+
+
+
+
 <script>
+/* ===================== GLOBAL IST SYNC — WRAPPING TIMER ===================== */
+
 const countdownEl = document.getElementById("countdownTimer");
-const stepEl = document.getElementById("stepCount");
 
-// ================= STEP 18 CONFIG =================
+// Duration = 5d 16h 21m 48s
+const DURATION =
+  (5 * 86400) +
+  (16 * 3600) +
+  (21 * 60) +
+  48;
 
-// STEP 18 DURATION → 8d 16h 42m 30s
-const STEP_18_DURATION_SEC =
-  (8 * 86400) + (16 * 3600) + (42 * 60) + 30;
+// 🔥 GLOBAL START TIME (IST)
+// IMPORTANT:
+// Set this ONCE — all devices use same time.
+// Change only if you want to restart countdown.
+const GLOBAL_START_IST =
+  new Date("2026-02-01T15:30:00+05:30").getTime();
 
-// Persisted start time
-let step18Start = localStorage.getItem("step18StartTime");
-
-if (!step18Start) {
-  step18Start = Date.now();
-  localStorage.setItem("step18StartTime", step18Start);
-}
-
-const STEP_18_END =
-  parseInt(step18Start, 10) + STEP_18_DURATION_SEC * 1000;
-
-// ================= UTIL =================
+// Calculate end time
+const GLOBAL_END = GLOBAL_START_IST + DURATION * 1000;
 
 function formatTime(sec) {
   let d = Math.floor(sec / 86400);
@@ -337,28 +340,21 @@ function formatTime(sec) {
   return `${d}d ${h}h ${m}m ${s}s`;
 }
 
-// ================= STEP 18 UI =================
-
-function updateStep18Countdown() {
+function updateCountdown() {
   const now = Date.now();
-  let remaining = Math.floor((STEP_18_END - now) / 1000);
+  let remaining = Math.floor((GLOBAL_END - now) / 1000);
 
   if (remaining <= 0) {
-    countdownEl.innerText = "Calculating";
+    countdownEl.innerText = "Finalizing...";
     return;
   }
 
-  stepEl.innerText = "18";
-  countdownEl.innerText = "Ending in " + formatTime(remaining);
+  countdownEl.innerText = "Completing in " + formatTime(remaining);
 }
 
-// Initial render + live countdown
-updateStep18Countdown();
-setInterval(updateStep18Countdown, 1000);
+updateCountdown();
+setInterval(updateCountdown, 1000);
 </script>
-
-
-
 
 
 
