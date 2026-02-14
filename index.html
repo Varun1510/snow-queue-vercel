@@ -344,7 +344,7 @@ function updateStep18Countdown() {
   let remaining = Math.floor((STEP_18_END - now) / 1000);
 
   if (remaining <= 0) {
-    countdownEl.innerText = "Final step completed";
+    countdownEl.innerText = "Calculating";
     return;
   }
 
