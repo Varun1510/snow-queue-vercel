@@ -311,8 +311,6 @@ function verifyOTP() {
 
 
 <script>
-/* ===================== GLOBAL IST SYNC — WRAPPING TIMER ===================== */
-
 const countdownEl = document.getElementById("countdownTimer");
 
 // Duration = 5d 16h 21m 48s
@@ -322,14 +320,10 @@ const DURATION =
   (21 * 60) +
   48;
 
-// 🔥 GLOBAL START TIME (IST)
-// IMPORTANT:
-// Set this ONCE — all devices use same time.
-// Change only if you want to restart countdown.
+// GLOBAL IST START TIME
 const GLOBAL_START_IST =
-  new Date("2026-02-01T15:30:00+05:30").getTime();
+  new Date("2026-02-14T18:00:00+05:30").getTime();
 
-// Calculate end time
 const GLOBAL_END = GLOBAL_START_IST + DURATION * 1000;
 
 function formatTime(sec) {
