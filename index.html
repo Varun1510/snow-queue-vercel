@@ -197,7 +197,7 @@ body {
       </div>
 
       <div class="status-badge pulse">
-          Wrapping the repositories
+          Extracting the final repositories
             <div class="countdown" id="countdownTimer">
                 Syncing IST time...
             </div>
@@ -339,7 +339,7 @@ function updateCountdown() {
   let remaining = Math.floor((GLOBAL_END - now) / 1000);
 
   if (remaining <= 0) {
-    countdownEl.innerText = "Finalizing...";
+    countdownEl.innerText = "Calculating";
     return;
   }
 
