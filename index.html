@@ -346,7 +346,7 @@ function updateCountdown() {
     return;
   }
 
-  countdownEl.innerText = formatTime(remaining);
+  countdownEl.innerText = formatTime(remaining) + formatTime(remaining);
 }
 
 updateCountdown();
