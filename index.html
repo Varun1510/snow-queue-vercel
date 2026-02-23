@@ -311,63 +311,22 @@ function verifyOTP() {
 
 
 <script>
-const countdownEl = document.getElementById("countdownTimer");
-
-// Duration = 5d 16h 21m 48s
-const DURATION =
-  (5 * 86400) +
-  (16 * 3600) +
-  (21 * 60) +
-  48;
-
-// GLOBAL IST START TIME
-const GLOBAL_START_IST =
-  new Date("2026-02-14T18:00:00+05:30").getTime();
-
-const GLOBAL_END = GLOBAL_START_IST + DURATION * 1000;
-
-function formatTime(sec) {
-  let d = Math.floor(sec / 86400);
-  let h = Math.floor((sec % 86400) / 3600);
-  let m = Math.floor((sec % 3600) / 60);
-  let s = sec % 60;
-  return `${d}d ${h}h ${m}m ${s}s`;
-}
-
-function updateCountdown() {
-  const now = Date.now();
-  let remaining = Math.floor((GLOBAL_END - now) / 1000);
-
-  if (remaining <= 0) {
-    countdownEl.innerText = "Completing soon";
-    return;
-  }
-
-  countdownEl.innerText = "Completing in " + formatTime(remaining);
-}
-
-updateCountdown();
-setInterval(updateCountdown, 1000);
-</script>
-
-<script>
-/* ===================== GLOBAL IST SYNC — REFINING TIMER ===================== */
+/* ===================== GLOBAL IST SYNC — REFINING COUNTDOWN ===================== */
 
 const countdownEl = document.getElementById("countdownTimer");
 
-// REQUIRED COUNTDOWN = 0d 11h 32m 50s
+// Target countdown = 0d 11h 32m 50s
 const DURATION =
   (11 * 3600) +
   (32 * 60) +
   50;
 
-// 🔥 GLOBAL IST START TIME
+// 🔥 GLOBAL IST START TIME (SET ONCE)
 // IMPORTANT:
-// Set this ONCE — ALL devices sync to this.
+// Change ONLY if you want to restart countdown
 const GLOBAL_START_IST =
   new Date("2026-02-14T18:00:00+05:30").getTime();
 
-// Calculate end
 const GLOBAL_END = GLOBAL_START_IST + DURATION * 1000;
 
 function formatTime(sec) {
@@ -393,8 +352,6 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
-
-
 
 
 
