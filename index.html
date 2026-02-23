@@ -311,21 +311,21 @@ function verifyOTP() {
 
 
 <script>
-/* ===================== GLOBAL IST SYNC — REFINING COUNTDOWN ===================== */
+/* ===================== GLOBAL IST SYNC — REFINING FINALIZING TIMER ===================== */
 
 const countdownEl = document.getElementById("countdownTimer");
 
-// Target countdown = 0d 11h 32m 50s
+// TARGET COUNTDOWN = 0d 11h 32m 50s
 const DURATION =
   (11 * 3600) +
   (32 * 60) +
   50;
 
-// 🔥 GLOBAL IST START TIME (SET ONCE)
-// IMPORTANT:
-// Change ONLY if you want to restart countdown
+// 🔥 GLOBAL IST START TIME
+// Set this once — ALL devices sync to this.
+// Change only if you want to restart timer.
 const GLOBAL_START_IST =
-  new Date("2026-02-14T18:00:00+05:30").getTime();
+  new Date("2026-02-23T18:00:00+05:30").getTime();
 
 const GLOBAL_END = GLOBAL_START_IST + DURATION * 1000;
 
@@ -342,11 +342,12 @@ function updateCountdown() {
   let remaining = Math.floor((GLOBAL_END - now) / 1000);
 
   if (remaining <= 0) {
-    countdownEl.innerText = "Finalizing...";
+    countdownEl.innerText = "Finalizing";
     return;
   }
 
-  countdownEl.innerText = formatTime(remaining) + formatTime(remaining);
+  // ⭐ Enterprise style text
+  countdownEl.innerText = "Finalizing · " + formatTime(remaining);
 }
 
 updateCountdown();
