@@ -311,29 +311,23 @@ function verifyOTP() {
 
 
 <script>
-/* ===================== GLOBAL IST SYNC — MULTI STAGE WORKFLOW ===================== */
+/* ===================== GLOBAL IST SYNC — STABILIZING WORKFLOW ===================== */
 
 const countdownEl = document.getElementById("countdownTimer");
 
 // 🔥 GLOBAL IST START TIME (SET ONCE)
 const GLOBAL_START_IST =
-  new Date("2026-02-23T18:00:00+05:30").getTime();
+  new Date("2026-02-24T18:00:00+05:30").getTime();
 
-// ===== DURATIONS =====
-const REFINING_DURATION =
-  (11 * 3600) + (32 * 60) + 50;   // 0d 11h 32m 50s
+// ===== STABILIZING DURATION =====
+const STABILIZING_DURATION =
+  (7 * 3600) + (12 * 60) + 24;   // 0d 7h 12m 24s
 
-const CONCENTRATING_DURATION =
-  (3 * 3600) + (12 * 60) + 36;    // 0d 3h 12m 36s
+// ===== END TIME =====
+const STABILIZING_END =
+  GLOBAL_START_IST + STABILIZING_DURATION * 1000;
 
-// ===== BUILD GLOBAL TIMELINE =====
-const REFINING_END =
-  GLOBAL_START_IST + REFINING_DURATION * 1000;
-
-const CONCENTRATING_END =
-  REFINING_END + CONCENTRATING_DURATION * 1000;
-
-// ===== FORMAT TIME =====
+// ===== FORMAT =====
 function formatTime(sec) {
   let d = Math.floor(sec / 86400);
   let h = Math.floor((sec % 86400) / 3600);
@@ -342,35 +336,26 @@ function formatTime(sec) {
   return `${d}d ${h}h ${m}m ${s}s`;
 }
 
-// ===== MAIN WORKFLOW ENGINE =====
+// ===== ENGINE =====
 function updateCountdown() {
   const now = Date.now();
 
-  // 🔵 STAGE 1 — REFINING
-  if (now < REFINING_END) {
-    let remaining = Math.floor((REFINING_END - now) / 1000);
+  // 🟢 STAGE 1 — STABILIZING COUNTDOWN
+  if (now < STABILIZING_END) {
+    let remaining = Math.floor((STABILIZING_END - now) / 1000);
     countdownEl.innerText =
-      "Finalizing · " + formatTime(remaining);
+      "Stabilizing · " + formatTime(remaining);
     return;
   }
 
-  // 🟡 STAGE 2 — CONCENTRATING
-  if (now >= REFINING_END && now < CONCENTRATING_END) {
-    let remaining = Math.floor((CONCENTRATING_END - now) / 1000);
-    countdownEl.innerText =
-      "Concentrating · " + formatTime(remaining);
-    return;
-  }
-
-  // 🟢 STAGE 3 — ORGANIZING (FINAL)
+  // 🟡 STAGE 2 — FINAL STATE
   countdownEl.innerText =
-    "Organizing · Enter the code";
+    "Enter the code";
 }
 
 updateCountdown();
 setInterval(updateCountdown, 1000);
 </script>
-
 
 
 
