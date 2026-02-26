@@ -321,36 +321,25 @@ function verifyOTP() {
 
 
 <script>
-/* ===================== GLOBAL IST SYNC — DUAL COUNTDOWN ===================== */
+/* ===================== STEP 1 GLOBAL IST COUNTDOWN ===================== */
 
-const step1El = document.getElementById("step1Timer");
-const step2El = document.getElementById("step2Timer");
+const countdownEl = document.getElementById("countdownTimer");
 
-// 🔥 GLOBAL START TIME (SET ONCE — SAME FOR ALL DEVICES)
+// 🔥 GLOBAL START TIME (same for all devices)
+// 👉 Change only if you want to restart timer
 const GLOBAL_START_IST =
   new Date("2026-02-26T18:00:00+05:30").getTime();
 
-// ===== DURATIONS =====
-
-// Step 1 → 1d 2h 16m 21s
+// Step-1 duration → 1d 2h 16m 21s
 const STEP1_DURATION =
   (0 * 86400) +
-  (18 * 3600) +
+  (16 * 3600) +
   (16 * 60) +
   21;
 
-// Step 2 → 7d 22h 11m 10s
-const STEP2_DURATION =
-  (7 * 86400) +
-  (22 * 3600) +
-  (11 * 60) +
-  10;
-
-// ===== END TIMES =====
+// End time
 const STEP1_END = GLOBAL_START_IST + STEP1_DURATION * 1000;
-const STEP2_END = GLOBAL_START_IST + STEP2_DURATION * 1000;
 
-// ===== FORMAT FUNCTION =====
 function formatTime(sec){
   let d = Math.floor(sec / 86400);
   let h = Math.floor((sec % 86400) / 3600);
@@ -359,28 +348,20 @@ function formatTime(sec){
   return `${d}d ${h}h ${m}m ${s}s`;
 }
 
-// ===== ENGINE =====
-function updateTimers(){
+function updateCountdown(){
   const now = Date.now();
+  let remaining = Math.floor((STEP1_END - now)/1000);
 
-  let rem1 = Math.floor((STEP1_END - now)/1000);
-  let rem2 = Math.floor((STEP2_END - now)/1000);
-
-  if(rem1 > 0){
-    step1El.innerText = "Step 1 · " + formatTime(rem1);
-  } else {
-    step1El.innerText = "Step 1 completed";
+  if(remaining <= 0){
+    countdownEl.innerText = "Step 1 completed";
+    return;
   }
 
-  if(rem2 > 0){
-    step2El.innerText = "Step 2 · " + formatTime(rem2);
-  } else {
-    step2El.innerText = "Step 2 completed";
-  }
+  countdownEl.innerText = "Step 1 · " + formatTime(remaining);
 }
 
-updateTimers();
-setInterval(updateTimers,1000);
+updateCountdown();
+setInterval(updateCountdown,1000);
 </script>
 
 
