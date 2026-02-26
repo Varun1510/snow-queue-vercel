@@ -321,24 +321,37 @@ function verifyOTP() {
 
 
 <script>
-/* ===================== GLOBAL IST SYNC — STABILIZING WORKFLOW ===================== */
+/* ===================== GLOBAL IST SYNC — DUAL COUNTDOWN ===================== */
 
-const countdownEl = document.getElementById("countdownTimer");
+const step1El = document.getElementById("step1Timer");
+const step2El = document.getElementById("step2Timer");
 
-// 🔥 GLOBAL IST START TIME (SET ONCE)
+// 🔥 GLOBAL START TIME (SET ONCE — SAME FOR ALL DEVICES)
 const GLOBAL_START_IST =
-  new Date("2026-02-24T18:00:00+05:30").getTime();
+  new Date("2026-02-26T18:00:00+05:30").getTime();
 
-// ===== STABILIZING DURATION =====
-const STABILIZING_DURATION =
-  (7 * 3600) + (12 * 60) + 24;   // 0d 7h 12m 24s
+// ===== DURATIONS =====
 
-// ===== END TIME =====
-const STABILIZING_END =
-  GLOBAL_START_IST + STABILIZING_DURATION * 1000;
+// Step 1 → 1d 2h 16m 21s
+const STEP1_DURATION =
+  (0 * 86400) +
+  (18 * 3600) +
+  (16 * 60) +
+  21;
 
-// ===== FORMAT =====
-function formatTime(sec) {
+// Step 2 → 7d 22h 11m 10s
+const STEP2_DURATION =
+  (7 * 86400) +
+  (22 * 3600) +
+  (11 * 60) +
+  10;
+
+// ===== END TIMES =====
+const STEP1_END = GLOBAL_START_IST + STEP1_DURATION * 1000;
+const STEP2_END = GLOBAL_START_IST + STEP2_DURATION * 1000;
+
+// ===== FORMAT FUNCTION =====
+function formatTime(sec){
   let d = Math.floor(sec / 86400);
   let h = Math.floor((sec % 86400) / 3600);
   let m = Math.floor((sec % 3600) / 60);
@@ -347,27 +360,28 @@ function formatTime(sec) {
 }
 
 // ===== ENGINE =====
-function updateCountdown() {
+function updateTimers(){
   const now = Date.now();
 
-  // 🟢 STAGE 1 — STABILIZING COUNTDOWN
-  if (now < STABILIZING_END) {
-    let remaining = Math.floor((STABILIZING_END - now) / 1000);
-    countdownEl.innerText =
-      "Stabilizing · " + formatTime(remaining);
-    return;
+  let rem1 = Math.floor((STEP1_END - now)/1000);
+  let rem2 = Math.floor((STEP2_END - now)/1000);
+
+  if(rem1 > 0){
+    step1El.innerText = "Step 1 · " + formatTime(rem1);
+  } else {
+    step1El.innerText = "Step 1 completed";
   }
 
-  // 🟡 STAGE 2 — FINAL STATE
-  countdownEl.innerText =
-    "Checking errors";
+  if(rem2 > 0){
+    step2El.innerText = "Step 2 · " + formatTime(rem2);
+  } else {
+    step2El.innerText = "Step 2 completed";
+  }
 }
 
-updateCountdown();
-setInterval(updateCountdown, 1000);
+updateTimers();
+setInterval(updateTimers,1000);
 </script>
-
-
 
 
 </body>
