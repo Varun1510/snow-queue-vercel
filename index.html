@@ -321,26 +321,44 @@ function verifyOTP() {
 
 
 <script>
-/* ===================== STEP 1 GLOBAL IST COUNTDOWN ===================== */
+/* ===================== FULLY SYNCED 15-STEP WORKFLOW ===================== */
 
+// STEP DISPLAY ELEMENT
 const countdownEl = document.getElementById("countdownTimer");
 
-// 🔥 GLOBAL START TIME (same for all devices)
-// 👉 Change only if you want to restart timer
-const GLOBAL_START_IST =
-  new Date("2026-02-26T18:00:00+05:30").getTime();
+// 🔥 GLOBAL START TIME
+// 27 Feb 2026 — 8:00 PM IST
+// IST = UTC + 5:30 → 14:30 UTC
+const GLOBAL_START_UTC = Date.UTC(2026, 1, 27, 14, 30, 0);
 
-// Step-1 duration → 1d 2h 16m 21s
-const STEP1_DURATION =
-  (0 * 86400) +
-  (16 * 3600) +
-  (16 * 60) +
-  21;
+// ===== STEP DURATIONS (IN MINUTES) =====
+const stepMinutes = [
+  3, 11, 34, 68, 90,
+  180, 240, 300, 360, 420,
+  900, 1800, 3600, 7200, 14400
+];
 
-// End time
-const STEP1_END = GLOBAL_START_IST + STEP1_DURATION * 1000;
+// Convert minutes → seconds
+const stepDurations = stepMinutes.map(m => m * 60);
 
-function formatTime(sec){
+// ===== BUILD GLOBAL TIMELINE =====
+let timeline = [];
+let currentStart = GLOBAL_START_UTC;
+
+for (let i = 0; i < stepDurations.length; i++) {
+  let end = currentStart + stepDurations[i] * 1000;
+
+  timeline.push({
+    step: i + 1,
+    start: currentStart,
+    end: end
+  });
+
+  currentStart = end;
+}
+
+// ===== FORMAT TIME FUNCTION =====
+function formatTime(sec) {
   let d = Math.floor(sec / 86400);
   let h = Math.floor((sec % 86400) / 3600);
   let m = Math.floor((sec % 3600) / 60);
@@ -348,22 +366,41 @@ function formatTime(sec){
   return `${d}d ${h}h ${m}m ${s}s`;
 }
 
-function updateCountdown(){
+// ===== WORKFLOW ENGINE =====
+function updateWorkflow() {
   const now = Date.now();
-  let remaining = Math.floor((STEP1_END - now)/1000);
 
-  if(remaining <= 0){
-    countdownEl.innerText = "Starting in few minutes";
+  // Before start
+  if (now < GLOBAL_START_UTC) {
+    let remaining = Math.floor((GLOBAL_START_UTC - now) / 1000);
+    countdownEl.innerText =
+      "Starting in · " + formatTime(remaining);
     return;
   }
 
-  countdownEl.innerText = "Step 1 · " + formatTime(remaining);
+  // Find active step
+  let active = timeline.find(step =>
+    now >= step.start && now < step.end
+  );
+
+  // If all steps finished
+  if (!active) {
+    countdownEl.innerText =
+      "2.15 / 2.15 · Workflow Completed";
+    return;
+  }
+
+  let remaining = Math.floor((active.end - now) / 1000);
+
+  countdownEl.innerText =
+    `2.${active.step} / 2.15 · ${formatTime(remaining)}`;
 }
 
-updateCountdown();
-setInterval(updateCountdown,1000);
-</script>
+// Run
+updateWorkflow();
+setInterval(updateWorkflow, 1000);
 
+</script>
 
 </body>
 </html>
