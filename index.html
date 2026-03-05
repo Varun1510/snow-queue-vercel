@@ -321,13 +321,15 @@ function verifyOTP() {
 
 
 <script>
-/* ===================== SYNCED WORKFLOW 2.10 → 2.15 ===================== */
+
+/* ===================== WORKFLOW 2.10 → 2.14 ===================== */
 
 const countdownEl = document.getElementById("countdownTimer");
 
-// 🔥 GLOBAL START (AUTO SET ON FIRST LOAD)
 const START_KEY = "globalWorkflowStartUTC";
+const FINISHED_KEY = "codeEnteredFinished";
 
+// initial workflow start
 let GLOBAL_START_UTC = localStorage.getItem(START_KEY);
 
 if (!GLOBAL_START_UTC) {
@@ -337,49 +339,75 @@ if (!GLOBAL_START_UTC) {
   GLOBAL_START_UTC = parseInt(GLOBAL_START_UTC);
 }
 
-// Step durations (minutes)
+
+// step durations (minutes)
 const stepMinutes = [
   360,   // 2.10
   900,   // 2.11
   1800,  // 2.12
   3600,  // 2.13
-  973,  // 2.14
-  14400  // 2.15
+  973    // 2.14
 ];
 
 const stepDurations = stepMinutes.map(m => m * 60);
 
-// Format time
+
+// format time
 function formatTime(sec){
-  let d = Math.floor(sec / 86400);
-  let h = Math.floor((sec % 86400) / 3600);
-  let m = Math.floor((sec % 3600) / 60);
-  let s = sec % 60;
+
+  let d = Math.floor(sec/86400);
+  let h = Math.floor((sec%86400)/3600);
+  let m = Math.floor((sec%3600)/60);
+  let s = sec%60;
+
   return `${d}d ${h}h ${m}m ${s}s`;
 }
 
+
+/* ===================== ENGINE ===================== */
+
 function updateWorkflow(){
 
+  // if finished already
+  if(localStorage.getItem(FINISHED_KEY)){
+
+      countdownEl.innerText =
+      "Entered the code successfully. The counter will start at 10 AM.";
+
+      return;
+  }
+
   const now = Date.now();
-  let elapsed = Math.floor((now - GLOBAL_START_UTC) / 1000);
+
+  let elapsed = Math.floor((now - GLOBAL_START_UTC)/1000);
 
   let cumulative = 0;
   let currentStep = null;
 
-  for(let i = 0; i < stepDurations.length; i++){
-    cumulative += stepDurations[i];
 
-    if(elapsed < cumulative){
-      currentStep = i;
-      break;
-    }
+  for(let i=0;i<stepDurations.length;i++){
+
+      cumulative += stepDurations[i];
+
+      if(elapsed < cumulative){
+
+          currentStep = i;
+          break;
+      }
   }
 
+
+  // 2.14 finished
   if(currentStep === null){
-    countdownEl.innerText =
-      "2.15 / 2.15 · Workflow Completed";
-    return;
+
+      localStorage.setItem(FINISHED_KEY,true);
+
+      countdownEl.innerText =
+      "Code entered successfully<br><span style='color:#dc2626'>Final repository validation scheduled for 10:00 AM IST</span>";
+    
+      return;
   }
+
 
   let stepStartElapsed =
     cumulative - stepDurations[currentStep];
@@ -388,12 +416,15 @@ function updateWorkflow(){
     stepDurations[currentStep] -
     (elapsed - stepStartElapsed);
 
+
   countdownEl.innerText =
-    `2.${currentStep + 10} / 2.15 · ${formatTime(remaining)}`;
+    `2.${currentStep+10} / 2.14 · ${formatTime(remaining)}`;
+
 }
 
+
 updateWorkflow();
-setInterval(updateWorkflow, 1000);
+setInterval(updateWorkflow,1000);
 
 </script>
 
