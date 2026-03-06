@@ -56,7 +56,6 @@ body {
   overflow: hidden;
 }
 
-/* Panel Header */
 .panel-header {
   padding: 20px 24px;
   font-size: 18px;
@@ -65,35 +64,68 @@ body {
   background: #f9fafb;
 }
 
-/* Panel Body */
 .panel-body {
   padding: 30px 26px;
 }
 
-/* Queue Number */
-.queue {
-  font-size: 80px;
-  font-weight: 800;
-  color: #16a34a;
+/* Workflow progress */
+
+.workflow{
+  margin-bottom:22px;
+  padding:16px;
+  border:1px solid #e5e7eb;
+  border-radius:10px;
+  background:#fafafa;
 }
 
-/* Field */
-.field {
-  margin-top: 14px;
+.workflow-step{
+  display:flex;
+  align-items:flex-start;
+  margin-bottom:10px;
 }
 
-.label {
-  font-size: 13px;
-  color: #6b7280;
+.workflow-step:last-child{
+  margin-bottom:0;
 }
 
-.value {
-  font-size: 16px;
-  font-weight: 600;
-  margin-top: 2px;
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  margin-right:12px;
+  margin-top:5px;
 }
 
-/* Stylish Queue Status */
+.completed .dot{
+  background:#22c55e;
+}
+
+.active .dot{
+  background:#2563eb;
+}
+
+.step-text{
+  font-size:14px;
+  font-weight:600;
+  color:#111827;
+}
+
+.step-timer{
+  margin-top:4px;
+  font-size:12px;
+  font-weight:600;
+  color:#166534;
+}
+
+.workflow-note{
+  margin-top:6px;
+  font-size:11px;
+  color:#6b7280;
+  max-width:520px;
+}
+
+/* Status card */
+
 .status-card {
   margin-top: 18px;
   padding: 18px 20px;
@@ -110,13 +142,6 @@ body {
   color: #6b7280;
   text-transform: uppercase;
   font-weight: 700;
-}
-
-.countdown {
-  font-size: 11px;
-  margin-top: 4px;
-  font-weight: 600;
-  color: #166534;
 }
 
 .status-main {
@@ -142,14 +167,8 @@ body {
   border-radius: 999px;
 }
 
-.final-warning{
-  margin-top:4px;
-  font-size:11px;
-  font-weight:600;
-  color:#dc2626; /* red */
-}
-  
 /* Pulse animation */
+
 .pulse {
   animation: pulseGlow 1.8s infinite;
 }
@@ -160,8 +179,8 @@ body {
   100% { box-shadow: 0 0 0 rgba(34,197,94,0.4); }
 }
 
-
 /* Footer */
+
 .footer {
   padding: 14px 26px;
   font-size: 12px;
@@ -169,262 +188,172 @@ body {
   border-top: 1px solid #e5e7eb;
   color: #9ca3af;
 }
+
+/* Fields */
+
+.field { margin-top:14px; }
+
+.label {
+  font-size:13px;
+  color:#6b7280;
+}
+
+.value {
+  font-size:16px;
+  font-weight:600;
+  margin-top:2px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar">
   ServiceNow<span>Portal</span>
 </div>
 
-<!-- BREADCRUMB -->
 <div class="breadcrumb">
   Home → Requests → Final Code Confirmation
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="container">
-  <div class="panel">
+<div class="panel">
 
-    <div class="panel-header">
-      Final Code Confirmation
-    </div>
-
-    <div class="panel-body">
-
-      <div class="status-card">
-          <div class="status-left">
-              <div class="status-title">Queue Status</div>
-              <div class="status-main">Final Approval Assessment</div>
-              <div class="status-sub">
-                  Finalizing final draft
-          </div>
-      </div>
-
-      <div class="status-badge pulse">
-          Final draft
-            <div class="countdown" id="countdownTimer">
-                Syncing IST time...
-            </div>
-     
-
-      
-      </div>
-
-
-</div>
-  </div>
-
-      <div class="field">
-        <div class="label">Name</div>
-        <div class="value">Varun Vaikunth Prabhu</div>
-      </div>
-
-      <div class="field">
-        <div class="label">Email</div>
-        <div class="value">Varun.Prabhu@du.ae</div>
-      </div>
-
-    </div>
-
-    <div class="footer">
-      Queue auto-updates every 5 minutes
-    </div>
-
-  </div>
+<div class="panel-header">
+Final Code Confirmation
 </div>
 
-<!-- OTP SCREEN LOCK -->
-<div id="otpLock" style="position:fixed; inset:0; background:#eef1f4; z-index:99999; display:flex; justify-content:center; align-items:center;">
+<div class="panel-body">
 
-  <div style="background:white; width:440px; border-radius:12px; box-shadow:0 20px 40px rgba(0,0,0,0.2); overflow:hidden;">
+<!-- Workflow Progress -->
 
-    <div style="padding:16px 22px; background:#1f2933; color:white; font-weight:600;">
-      Identity Verification
-    </div>
+<div class="workflow">
 
-    <div style="padding:22px; font-size:14px; color:#374151;">
-      OTP has been sent to  
-      <b>Varun.Prabhu@du.ae</b>
-    </div>
-
-    <div style="padding:0 22px 18px;">
-      <input id="otpInput" type="text" placeholder="Enter OTP"
-        style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:6px; font-size:15px;">
-    </div>
-
-    <div style="padding:14px 22px; background:#f9fafb; text-align:right;">
-      <button onclick="verifyOTP()" style="padding:8px 20px; background:#22c55e; border:none; color:white; border-radius:6px; font-weight:600; cursor:pointer;">
-        Verify
-      </button>
-    </div>
-
+  <div class="workflow-step completed">
+    <div class="dot"></div>
+    <div class="step-text">2.14 Completed</div>
   </div>
+
+  <div class="workflow-step active">
+    <div class="dot pulse"></div>
+    <div class="step-text">
+      2.15 Export Finalization
+      <div class="step-timer" id="countdownTimer">
+        Syncing workflow timer...
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Status Card -->
+
+<div class="status-card">
+
+<div>
+<div class="status-title">Queue Status</div>
+<div class="status-main">Final Approval Assessment</div>
+<div class="status-sub">
+Finalizing final draft
+</div>
+</div>
+
+<div class="status-badge pulse">
+Final draft
+</div>
+
+</div>
+
+<div class="field">
+<div class="label">Name</div>
+<div class="value">Varun Vaikunth Prabhu</div>
+</div>
+
+<div class="field">
+<div class="label">Email</div>
+<div class="value">Varun.Prabhu@du.ae</div>
+</div>
+
+</div>
+
+<div class="footer">
+Queue auto-updates every 5 minutes
+</div>
+
+</div>
 </div>
 
 <script>
-/* ===================== QUEUE LOGIC ===================== */
-/*
-const START_QUEUE = 7;
-const DROP_INTERVAL_MS = 2 * 60 * 60 * 5000; // 2 hours
-
-if (!localStorage.getItem("queueStartTime")) {
-  localStorage.setItem("queueStartTime", Date.now());
-}
-
-const startTime = parseInt(localStorage.getItem("queueStartTime"));
-
-function updateQueue() {
-  const now = Date.now();
-  const elapsed = now - startTime;
-
-  const drops = Math.floor(elapsed / DROP_INTERVAL_MS);
-  let queue = START_QUEUE - drops;
-
-  if (queue < 0) queue = 0;
-
-  document.getElementById("queue").innerText = queue;
-}
-
-updateQueue();
-setInterval(updateQueue, 60000); // silent update every 1 minute
-*/
-
-/* ===================== OTP LOCK ===================== */
-const FAKE_OTP = "823190"; // Change OTP here
-
-if (!localStorage.getItem("otpVerified")) {
-  document.body.style.overflow = "hidden";
-} else {
-  document.getElementById("otpLock").style.display = "none";
-}
-
-function verifyOTP() {
-  const entered = document.getElementById("otpInput").value.trim();
-
-  if (entered === FAKE_OTP) {
-    localStorage.setItem("otpVerified", "true");
-    document.getElementById("otpLock").style.display = "none";
-    document.body.style.overflow = "auto";
-  } else {
-    alert("Invalid OTP. Please try again.");
-  }
-}
-</script>
-
-
-
-
-
-
-
-<script>
-
-/* ===================== WORKFLOW 2.10 → 2.14 ===================== */
 
 const countdownEl = document.getElementById("countdownTimer");
 
-const START_KEY = "globalWorkflowStartUTC";
-const FINISHED_KEY = "codeEnteredFinished";
+/* Total workflow duration before 2.15 */
 
-// initial workflow start
-let GLOBAL_START_UTC = localStorage.getItem(START_KEY);
-
-if (!GLOBAL_START_UTC) {
-  GLOBAL_START_UTC = Date.now();
-  localStorage.setItem(START_KEY, GLOBAL_START_UTC);
-} else {
-  GLOBAL_START_UTC = parseInt(GLOBAL_START_UTC);
-}
-
-
-// step durations (minutes)
 const stepMinutes = [
-  360,   // 2.10
-  900,   // 2.11
-  1800,  // 2.12
-  3600,  // 2.13
-  973    // 2.14
+360,
+900,
+1800,
+3600,
+973
 ];
 
 const stepDurations = stepMinutes.map(m => m * 60);
 
+const START_KEY = "globalWorkflowStartUTC";
 
-// format time
+let GLOBAL_START_UTC = localStorage.getItem(START_KEY);
+
+if (!GLOBAL_START_UTC) {
+GLOBAL_START_UTC = Date.now();
+localStorage.setItem(START_KEY, GLOBAL_START_UTC);
+} else {
+GLOBAL_START_UTC = parseInt(GLOBAL_START_UTC);
+}
+
 function formatTime(sec){
 
-  let d = Math.floor(sec/86400);
-  let h = Math.floor((sec%86400)/3600);
-  let m = Math.floor((sec%3600)/60);
-  let s = sec%60;
+let d = Math.floor(sec/86400);
+let h = Math.floor((sec%86400)/3600);
+let m = Math.floor((sec%3600)/60);
+let s = sec%60;
 
-  return `${d}d ${h}h ${m}m ${s}s`;
+return `${d}d ${h}h ${m}m ${s}s`;
 }
 
+/* 2.15 Countdown */
 
-/* ===================== ENGINE ===================== */
+function updateCountdown(){
 
-function updateWorkflow(){
+const step215Seconds =
+(2 * 86400) +
+(12 * 3600) +
+(4 * 60) +
+30;
 
-  // if finished already
-  if(localStorage.getItem(FINISHED_KEY)){
+const endTime =
+GLOBAL_START_UTC +
+stepDurations.reduce((a,b)=>a+b,0)*1000 +
+step215Seconds*1000;
 
-      countdownEl.innerText =
-      "Starting";
+const now = Date.now();
 
-      return;
-  }
+let remaining =
+Math.floor((endTime - now)/1000);
 
-  const now = Date.now();
+if(remaining < 0) remaining = 0;
 
-  let elapsed = Math.floor((now - GLOBAL_START_UTC)/1000);
-
-  let cumulative = 0;
-  let currentStep = null;
-
-
-  for(let i=0;i<stepDurations.length;i++){
-
-      cumulative += stepDurations[i];
-
-      if(elapsed < cumulative){
-
-          currentStep = i;
-          break;
-      }
-  }
-
-
-  // 2.14 finished
-  if(currentStep === null){
-
-      localStorage.setItem(FINISHED_KEY,true);
-
-      countdownEl.innerText =
-      "Code entered successfully<br><span style='color:#dc2626'>Final repository validation scheduled for 10:00 AM IST</span>";
-    
-      return;
-  }
-
-
-  let stepStartElapsed =
-    cumulative - stepDurations[currentStep];
-
-  let remaining =
-    stepDurations[currentStep] -
-    (elapsed - stepStartElapsed);
-
-
-  countdownEl.innerText =
-    `2.${currentStep+10} / 2.14 · ${formatTime(remaining)}`;
+countdownEl.innerHTML =
+formatTime(remaining) +
+"<div class='workflow-note'>" +
+"This countdown is dynamic in nature and is calculated based on the remaining export data. " +
+"The duration may also vary depending on your Wi-Fi network conditions. " +
+"If the export process is not completed by <b>07 March, 12:00 PM UTC</b>, the system will automatically display the final completion time." +
+"</div>";
 
 }
 
-
-updateWorkflow();
-setInterval(updateWorkflow,1000);
+updateCountdown();
+setInterval(updateCountdown,1000);
 
 </script>
 
