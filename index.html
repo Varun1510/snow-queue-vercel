@@ -5,217 +5,220 @@
 <title>Final Code Confirmation — ServiceNow</title>
 
 <style>
-* { box-sizing: border-box; }
+*{box-sizing:border-box}
 
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #eef1f4;
-  color: #1f2937;
+body{
+margin:0;
+font-family:"Segoe UI",Arial,sans-serif;
+background:#eef1f4;
+color:#1f2937
 }
 
-/* Navbar */
+/* NAVBAR */
 
-.navbar {
-  background: #1f2933;
-  color: white;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  padding: 0 28px;
-  font-weight: 600;
-  font-size: 16px;
+.navbar{
+background:#1f2933;
+color:white;
+height:56px;
+display:flex;
+align-items:center;
+padding:0 28px;
+font-weight:600;
+font-size:16px
 }
 
-.navbar span {
-  color: #7dd3a7;
-  margin-left: 6px;
+.navbar span{
+color:#7dd3a7;
+margin-left:6px
 }
 
-/* Breadcrumb */
+/* BREADCRUMB */
 
-.breadcrumb {
-  padding: 12px 28px;
-  font-size: 13px;
-  color: #6b7280;
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
+.breadcrumb{
+padding:12px 28px;
+font-size:13px;
+color:#6b7280;
+background:white;
+border-bottom:1px solid #e5e7eb
 }
 
-/* Layout */
+/* LAYOUT */
 
-.container {
-  max-width: 860px;
-  margin: 40px auto;
-  padding: 0 20px;
+.container{
+max-width:860px;
+margin:40px auto;
+padding:0 20px
 }
 
-.panel {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 10px 26px rgba(0,0,0,0.08);
-  border-top: 6px solid #22c55e;
+.panel{
+background:white;
+border-radius:10px;
+box-shadow:0 10px 26px rgba(0,0,0,.08);
+border-top:6px solid #22c55e
 }
 
-.panel-header {
-  padding: 20px 24px;
-  font-size: 18px;
-  font-weight: 700;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f9fafb;
+.panel-header{
+padding:20px 24px;
+font-size:18px;
+font-weight:700;
+border-bottom:1px solid #e5e7eb;
+background:#f9fafb
 }
 
-.panel-body {
-  padding: 30px 26px;
+.panel-body{
+padding:30px 26px
 }
 
-/* Workflow */
+/* WORKFLOW CARD */
 
 .workflow-card{
-  margin-bottom:24px;
-  padding:18px;
-  border-radius:12px;
-  border:1px solid #e5e7eb;
-  background:#fafafa;
+margin-bottom:26px;
+padding:18px;
+border:1px solid #e5e7eb;
+border-radius:12px;
+background:#fafafa
 }
 
 .workflow-row{
-  display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  padding:12px 0;
-  border-bottom:1px solid #ececec;
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+padding:12px 0;
+border-bottom:1px solid #ececec
 }
 
 .workflow-row:last-child{
-  border-bottom:none;
+border-bottom:none
 }
 
 .workflow-icon{
-  width:24px;
-  height:24px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:14px;
-  font-weight:700;
-  margin-right:12px;
+width:26px;
+height:26px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+margin-right:12px;
+font-size:14px
 }
 
 .completed .workflow-icon{
-  background:#22c55e;
-  color:white;
+background:#22c55e;
+color:white
 }
 
 .active .workflow-icon{
-  background:#2563eb;
+background:#2563eb
 }
 
 .workflow-content{
-  flex:1;
+flex:1
 }
 
 .workflow-title{
-  font-size:12px;
-  text-transform:uppercase;
-  color:#6b7280;
-  font-weight:700;
+font-size:12px;
+font-weight:700;
+text-transform:uppercase;
+color:#6b7280
 }
 
 .workflow-desc{
-  font-size:16px;
-  font-weight:700;
-  margin-top:2px;
-}
-
-.step-timer{
-  margin-top:6px;
-  font-size:14px;
-  font-weight:700;
-  color:#166534;
-}
-
-.workflow-note{
-  margin-top:6px;
-  font-size:11px;
-  color:#6b7280;
-  max-width:520px;
+font-size:17px;
+font-weight:800;
+margin-top:2px;
+color:#111827
 }
 
 .workflow-status{
-  font-size:12px;
-  font-weight:700;
-  padding:6px 12px;
-  border-radius:999px;
+font-size:12px;
+font-weight:700;
+padding:6px 12px;
+border-radius:999px
 }
 
 .status-completed{
-  background:#dcfce7;
-  color:#15803d;
+background:#dcfce7;
+color:#15803d
 }
 
 .status-running{
-  background:#dbeafe;
-  color:#1d4ed8;
+background:#dbeafe;
+color:#1d4ed8
 }
 
-/* Pulse animation */
+.step-timer{
+margin-top:6px;
+font-size:15px;
+font-weight:800;
+color:#166534
+}
+
+.workflow-note{
+margin-top:6px;
+font-size:11px;
+color:#6b7280;
+max-width:520px
+}
+
+/* PULSE */
 
 .pulse-blue{
-  animation:pulseBlue 1.8s infinite;
+animation:pulseBlue 1.8s infinite
 }
 
 @keyframes pulseBlue{
-  0%{box-shadow:0 0 0 rgba(37,99,235,0.4)}
-  70%{box-shadow:0 0 10px rgba(37,99,235,0.6)}
-  100%{box-shadow:0 0 0 rgba(37,99,235,0.4)}
+0%{box-shadow:0 0 0 rgba(37,99,235,.4)}
+70%{box-shadow:0 0 12px rgba(37,99,235,.6)}
+100%{box-shadow:0 0 0 rgba(37,99,235,.4)}
 }
 
-/* Status card */
+/* STATUS CARD */
 
-.status-card {
-  margin-top: 18px;
-  padding: 18px 20px;
-  background: linear-gradient(135deg, #f9fafb, #ffffff);
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  display: flex;
-  justify-content: space-between;
+.status-card{
+margin-top:20px;
+padding:18px 20px;
+background:linear-gradient(135deg,#f9fafb,#fff);
+border:1px solid #e5e7eb;
+border-radius:12px;
+display:flex;
+justify-content:space-between
 }
 
-.status-title {
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 700;
+.status-title{
+font-size:12px;
+font-weight:700;
+color:#6b7280
 }
 
-.status-main {
-  font-size: 18px;
-  font-weight: 800;
-  margin-top: 4px;
+.status-main{
+font-size:20px;
+font-weight:800;
+margin-top:4px
 }
 
-.status-sub {
-  font-size: 14px;
-  color: #6b7280;
+.status-sub{
+font-size:14px;
+color:#6b7280
 }
 
-.status-badge {
-  background: #dcfce7;
-  color: #15803d;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 999px;
+.status-badge{
+background:#dcfce7;
+color:#15803d;
+font-size:12px;
+font-weight:700;
+padding:6px 14px;
+border-radius:999px
 }
 
-.footer {
-  padding: 14px 26px;
-  font-size: 12px;
-  background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-  color: #9ca3af;
+/* FOOTER */
+
+.footer{
+padding:14px 26px;
+font-size:12px;
+background:#f9fafb;
+border-top:1px solid #e5e7eb;
+color:#9ca3af
 }
 </style>
 </head>
@@ -239,17 +242,21 @@ Final Code Confirmation
 
 <div class="panel-body">
 
-<!-- Workflow -->
+<!-- WORKFLOW -->
 
 <div class="workflow-card">
 
 <div class="workflow-row completed">
+
+<div style="display:flex">
 
 <div class="workflow-icon">✓</div>
 
 <div class="workflow-content">
 <div class="workflow-title">Step 2.14</div>
 <div class="workflow-desc">Export Package Validation</div>
+</div>
+
 </div>
 
 <div class="workflow-status status-completed">
@@ -261,10 +268,14 @@ Completed
 
 <div class="workflow-row active">
 
+<div style="display:flex">
+
 <div class="workflow-icon pulse-blue"></div>
 
 <div class="workflow-content">
+
 <div class="workflow-title">Step 2.15</div>
+
 <div class="workflow-desc">Export Finalization</div>
 
 <div class="step-timer" id="countdownTimer">
@@ -272,9 +283,12 @@ Syncing workflow timer...
 </div>
 
 <div class="workflow-note">
-This countdown is dynamic in nature and is calculated based on the remaining export data. 
-The duration may also vary depending on your Wi-Fi network conditions. 
-If the export process is not completed by <b>07 March, 12:00 PM UTC</b>, the system will automatically display the final completion time.
+This countdown is dynamic in nature and is calculated based on the remaining export data.
+The duration may also vary depending on your Wi-Fi network conditions.
+If the export process is not completed by <b>07 March, 12:00 PM UTC</b>,
+the system will automatically display the final completion time.
+</div>
+
 </div>
 
 </div>
@@ -287,16 +301,14 @@ Processing
 
 </div>
 
-<!-- Status Card -->
+<!-- STATUS CARD -->
 
 <div class="status-card">
 
 <div>
 <div class="status-title">Queue Status</div>
 <div class="status-main">Final Approval Assessment</div>
-<div class="status-sub">
-Finalizing final draft
-</div>
+<div class="status-sub">Finalizing final draft</div>
 </div>
 
 <div class="status-badge">
@@ -316,66 +328,55 @@ Queue auto-updates every 5 minutes
 
 <script>
 
-const countdownEl = document.getElementById("countdownTimer");
+/* GLOBAL START TIME (SYNCED ACROSS ALL DEVICES) */
 
-const stepMinutes = [
-360,
-900,
-1800,
-3600,
-973
-];
+const GLOBAL_START_UTC =
+Date.parse("2026-03-04T12:00:00Z");
 
-const stepDurations = stepMinutes.map(m => m * 60);
+/* previous workflow duration */
 
-const START_KEY = "globalWorkflowStartUTC";
+const stepMinutes=[360,900,1800,3600,973]
 
-let GLOBAL_START_UTC = localStorage.getItem(START_KEY);
+const stepDurations=stepMinutes.map(m=>m*60)
 
-if (!GLOBAL_START_UTC) {
-GLOBAL_START_UTC = Date.now();
-localStorage.setItem(START_KEY, GLOBAL_START_UTC);
-} else {
-GLOBAL_START_UTC = parseInt(GLOBAL_START_UTC);
-}
+const countdownEl=document.getElementById("countdownTimer")
 
 function formatTime(sec){
 
-let d = Math.floor(sec/86400);
-let h = Math.floor((sec%86400)/3600);
-let m = Math.floor((sec%3600)/60);
-let s = sec%60;
+let d=Math.floor(sec/86400)
+let h=Math.floor((sec%86400)/3600)
+let m=Math.floor((sec%3600)/60)
+let s=sec%60
 
-return `${d}d ${h}h ${m}m ${s}s`;
+return `${d}d ${h}h ${m}m ${s}s`
 }
 
 function updateCountdown(){
 
-const step215Seconds =
-(3 * 86400) +
-(8 * 3600) +
-(4 * 60) +
-30;
+const step215Seconds=
+(2*86400)+
+(12*3600)+
+(4*60)+
+30
 
-const endTime =
-GLOBAL_START_UTC +
-stepDurations.reduce((a,b)=>a+b,0)*1000 +
-step215Seconds*1000;
+const endTime=
+GLOBAL_START_UTC+
+stepDurations.reduce((a,b)=>a+b,0)*1000+
+step215Seconds*1000
 
-const now = Date.now();
+const now=Date.now()
 
-let remaining =
-Math.floor((endTime - now)/1000);
+let remaining=Math.floor((endTime-now)/1000)
 
-if(remaining < 0) remaining = 0;
+if(remaining<0)remaining=0
 
-countdownEl.innerHTML =
-formatTime(remaining);
+countdownEl.innerText=formatTime(remaining)
 
 }
 
-updateCountdown();
-setInterval(updateCountdown,1000);
+updateCountdown()
+
+setInterval(updateCountdown,1000)
 
 </script>
 
