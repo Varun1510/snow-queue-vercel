@@ -5,6 +5,7 @@
 <title>Final Code Confirmation — ServiceNow</title>
 
 <style>
+
 *{box-sizing:border-box}
 
 body{
@@ -13,8 +14,6 @@ font-family:"Segoe UI",Arial,sans-serif;
 background:#eef1f4;
 color:#1f2937
 }
-
-/* NAVBAR */
 
 .navbar{
 background:#1f2933;
@@ -32,8 +31,6 @@ color:#7dd3a7;
 margin-left:6px
 }
 
-/* BREADCRUMB */
-
 .breadcrumb{
 padding:12px 28px;
 font-size:13px;
@@ -41,8 +38,6 @@ color:#6b7280;
 background:white;
 border-bottom:1px solid #e5e7eb
 }
-
-/* LAYOUT */
 
 .container{
 max-width:860px;
@@ -69,7 +64,7 @@ background:#f9fafb
 padding:30px 26px
 }
 
-/* WORKFLOW CARD */
+/* workflow */
 
 .workflow-card{
 margin-bottom:26px;
@@ -82,13 +77,16 @@ background:#fafafa
 .workflow-row{
 display:flex;
 justify-content:space-between;
-align-items:flex-start;
 padding:12px 0;
 border-bottom:1px solid #ececec
 }
 
 .workflow-row:last-child{
 border-bottom:none
+}
+
+.workflow-left{
+display:flex
 }
 
 .workflow-icon{
@@ -112,10 +110,6 @@ color:white
 background:#2563eb
 }
 
-.workflow-content{
-flex:1
-}
-
 .workflow-title{
 font-size:12px;
 font-weight:700;
@@ -126,8 +120,21 @@ color:#6b7280
 .workflow-desc{
 font-size:17px;
 font-weight:800;
-margin-top:2px;
-color:#111827
+margin-top:2px
+}
+
+.step-timer{
+margin-top:6px;
+font-size:15px;
+font-weight:800;
+color:#166534
+}
+
+.workflow-note{
+margin-top:6px;
+font-size:11px;
+color:#6b7280;
+max-width:520px
 }
 
 .workflow-status{
@@ -147,23 +154,7 @@ background:#dbeafe;
 color:#1d4ed8
 }
 
-.step-timer{
-margin-top:6px;
-font-size:15px;
-font-weight:800;
-color:#166534
-}
-
-.workflow-note{
-margin-top:6px;
-font-size:11px;
-color:#6b7280;
-max-width:520px
-}
-
-/* PULSE */
-
-.pulse-blue{
+.pulse{
 animation:pulseBlue 1.8s infinite
 }
 
@@ -172,8 +163,6 @@ animation:pulseBlue 1.8s infinite
 70%{box-shadow:0 0 12px rgba(37,99,235,.6)}
 100%{box-shadow:0 0 0 rgba(37,99,235,.4)}
 }
-
-/* STATUS CARD */
 
 .status-card{
 margin-top:20px;
@@ -211,8 +200,6 @@ padding:6px 14px;
 border-radius:999px
 }
 
-/* FOOTER */
-
 .footer{
 padding:14px 26px;
 font-size:12px;
@@ -220,6 +207,7 @@ background:#f9fafb;
 border-top:1px solid #e5e7eb;
 color:#9ca3af
 }
+
 </style>
 </head>
 
@@ -242,17 +230,15 @@ Final Code Confirmation
 
 <div class="panel-body">
 
-<!-- WORKFLOW -->
-
 <div class="workflow-card">
 
 <div class="workflow-row completed">
 
-<div style="display:flex">
+<div class="workflow-left">
 
 <div class="workflow-icon">✓</div>
 
-<div class="workflow-content">
+<div>
 <div class="workflow-title">Step 2.14</div>
 <div class="workflow-desc">Export Package Validation</div>
 </div>
@@ -268,25 +254,23 @@ Completed
 
 <div class="workflow-row active">
 
-<div style="display:flex">
+<div class="workflow-left">
 
-<div class="workflow-icon pulse-blue"></div>
+<div class="workflow-icon pulse"></div>
 
-<div class="workflow-content">
+<div>
 
 <div class="workflow-title">Step 2.15</div>
-
 <div class="workflow-desc">Export Finalization</div>
 
-<div class="step-timer" id="countdownTimer">
+<div class="step-timer" id="timer">
 Syncing workflow timer...
 </div>
 
 <div class="workflow-note">
 This countdown is dynamic in nature and is calculated based on the remaining export data.
 The duration may also vary depending on your Wi-Fi network conditions.
-If the export process is not completed by <b>07 March, 12:00 PM UTC</b>,
-the system will automatically display the final completion time.
+If the export process is not completed by <b>07 March, 12:00 PM UTC</b>, the system will display the final completion time.
 </div>
 
 </div>
@@ -300,8 +284,6 @@ Processing
 </div>
 
 </div>
-
-<!-- STATUS CARD -->
 
 <div class="status-card">
 
@@ -328,18 +310,10 @@ Queue auto-updates every 5 minutes
 
 <script>
 
-/* GLOBAL START TIME (SYNCED ACROSS ALL DEVICES) */
+/* GLOBAL END TIME (SYNCED WORLDWIDE) */
+/* Set this to now + 2d 16h 30m 4s */
 
-const GLOBAL_START_UTC =
-Date.parse("2026-03-04T12:00:00Z");
-
-/* previous workflow duration */
-
-const stepMinutes=[360,900,1800,3600,973]
-
-const stepDurations=stepMinutes.map(m=>m*60)
-
-const countdownEl=document.getElementById("countdownTimer")
+const END_TIME = Date.parse("2026-03-09T18:30:04Z");
 
 function formatTime(sec){
 
@@ -351,32 +325,21 @@ let s=sec%60
 return `${d}d ${h}h ${m}m ${s}s`
 }
 
-function updateCountdown(){
-
-const step215Seconds=
-(2*86400)+
-(12*3600)+
-(4*60)+
-30
-
-const endTime=
-GLOBAL_START_UTC+
-stepDurations.reduce((a,b)=>a+b,0)*1000+
-step215Seconds*1000
+function updateTimer(){
 
 const now=Date.now()
 
-let remaining=Math.floor((endTime-now)/1000)
+let remaining=Math.floor((END_TIME-now)/1000)
 
 if(remaining<0)remaining=0
 
-countdownEl.innerText=formatTime(remaining)
+document.getElementById("timer").innerText=formatTime(remaining)
 
 }
 
-updateCountdown()
+updateTimer()
 
-setInterval(updateCountdown,1000)
+setInterval(updateTimer,1000)
 
 </script>
 
