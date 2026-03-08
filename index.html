@@ -123,20 +123,6 @@ font-weight:800;
 margin-top:2px
 }
 
-.step-timer{
-margin-top:6px;
-font-size:15px;
-font-weight:800;
-color:#166534
-}
-
-.workflow-note{
-margin-top:6px;
-font-size:11px;
-color:#6b7280;
-max-width:520px
-}
-
 .workflow-status{
 font-size:12px;
 font-weight:700;
@@ -150,18 +136,16 @@ color:#15803d
 }
 
 .status-running{
-background:#dbeafe;
-color:#1d4ed8
+background:#fde68a;
+color:#92400e
 }
 
-.pulse{
-animation:pulseBlue 1.8s infinite
-}
-
-@keyframes pulseBlue{
-0%{box-shadow:0 0 0 rgba(37,99,235,.4)}
-70%{box-shadow:0 0 12px rgba(37,99,235,.6)}
-100%{box-shadow:0 0 0 rgba(37,99,235,.4)}
+.workflow-note{
+margin-top:10px;
+font-size:13px;
+color:#374151;
+max-width:560px;
+line-height:1.5
 }
 
 .status-card{
@@ -232,6 +216,8 @@ Final Code Confirmation
 
 <div class="workflow-card">
 
+<!-- STEP 2.14 -->
+
 <div class="workflow-row completed">
 
 <div class="workflow-left">
@@ -239,7 +225,7 @@ Final Code Confirmation
 <div class="workflow-icon">✓</div>
 
 <div>
-<div class="workflow-title">Step 2.14</div>
+<div class="workflow-title">STEP 2.14</div>
 <div class="workflow-desc">Export Package Validation</div>
 </div>
 
@@ -251,26 +237,28 @@ Completed
 
 </div>
 
+<!-- STEP 2.15 -->
 
 <div class="workflow-row active">
 
 <div class="workflow-left">
 
-<div class="workflow-icon pulse"></div>
+<div class="workflow-icon"></div>
 
 <div>
 
-<div class="workflow-title">Step 2.15</div>
+<div class="workflow-title">STEP 2.15</div>
 <div class="workflow-desc">Export Finalization</div>
 
-<div class="step-timer" id="timer">
-Syncing workflow timer...
-</div>
-
 <div class="workflow-note">
-This countdown is dynamic in nature and is calculated based on the remaining export data.
-The duration may also vary depending on your Wi-Fi network conditions.
-If the export process is not completed by <b>07 March, 12:00 PM UTC</b>, the system will display the final completion time.
+
+Export Finalization was not completed within the designated timeframe.
+
+The system is currently calculating the final time required to export the remaining data.  
+This process may take additional time depending on the volume of export data and network conditions.
+
+The final completion timestamp will be displayed once the export operation has been successfully finalized.
+
 </div>
 
 </div>
@@ -278,7 +266,7 @@ If the export process is not completed by <b>07 March, 12:00 PM UTC</b>, the sys
 </div>
 
 <div class="workflow-status status-running">
-Processing
+Recalculating
 </div>
 
 </div>
@@ -307,41 +295,6 @@ Queue auto-updates every 5 minutes
 
 </div>
 </div>
-
-<script>
-
-/* GLOBAL END TIME (SYNCED WORLDWIDE) */
-/* Set this to now + 2d 16h 30m 4s */
-
-const END_TIME = Date.parse("2026-03-09T02:30:04Z");
-
-function formatTime(sec){
-
-let d=Math.floor(sec/86400)
-let h=Math.floor((sec%86400)/3600)
-let m=Math.floor((sec%3600)/60)
-let s=sec%60
-
-return `${d}d ${h}h ${m}m ${s}s`
-}
-
-function updateTimer(){
-
-const now=Date.now()
-
-let remaining=Math.floor((END_TIME-now)/1000)
-
-if(remaining<0)remaining=0
-
-document.getElementById("timer").innerText=formatTime(remaining)
-
-}
-
-updateTimer()
-
-setInterval(updateTimer,1000)
-
-</script>
 
 </body>
 </html>
